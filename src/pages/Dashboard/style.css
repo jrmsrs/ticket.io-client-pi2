@@ -1,0 +1,101 @@
+.btn-square {
+  text-align: center;
+  display: block;
+  margin: auto;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 36px !important;
+  backdrop-filter: blur(50px);
+  font-weight: 100;
+}
+.btn-square p {
+  font-size: smaller;
+  margin: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.btn-square svg {
+  height: 50%;
+  width: 50%;
+  margin: auto;
+}
+
+@media (min-width: 575px) {
+  .btn-square {
+    text-align: center;
+    display: block;
+    margin: auto;
+    width: 200px;
+    height: 200px;
+  }
+  .btn-square p {
+    margin: 3px;
+  }
+  .btn-square svg {
+    height: 50%;
+    width: 50%;
+    margin: auto;
+  }
+}
+
+@media (min-width: 898px) {
+  .btn-square {
+    display: block;
+    margin: auto;
+    width: 220px;
+    height: 220px;
+  }
+  .btn-square p {
+    margin: 3px;
+  }
+  .btn-square svg {
+    height: 50%;
+    width: 50%;
+    margin: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .btn-square {
+    display: block;
+    margin: auto;
+    width: 190px;
+    height: 190px;
+  }
+  .btn-square p {
+    margin: 3px;
+  }
+  .btn-square svg {
+    height: 50%;
+    width: 50%;
+    margin: auto;
+  }
+}
+@media (min-width: 1600px) {
+  .btn-square {
+    display: block;
+    margin: auto;
+    width: 150px;
+    height: 150px;
+  }
+  .btn-square p {
+    font-size: smaller;
+    margin: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .btn-square svg {
+    height: 40%;
+    width: 40%;
+    margin: auto;
+  }
+}
+  
+.chart div div div div div svg rect {
+  fill: #ffffff46;
+}
+
+.chart div div div div div {
+  backdrop-filter: blur(50px);
+  border-radius: 15px;
+}

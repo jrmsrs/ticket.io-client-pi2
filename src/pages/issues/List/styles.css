@@ -1,0 +1,11 @@
+table-responsive{
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.data-table-extensions{
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.data-table-extensions-action{
+  display: none;
+}

@@ -1,0 +1,47 @@
+th {
+  white-space: nowrap !important;
+}
+/* Gambiarra pra estilizar as tabelas autogeradas */
+
+.table-responsive-light,
+.table-responsive-dark {
+  border-top-right-radius: 0.8em;
+  border-top-left-radius: 0.8em;
+}
+.table-responsive-light nav,
+.table-responsive-dark nav {
+  border-bottom-right-radius: 0.8em;
+  border-bottom-left-radius: 0.8em;
+}
+
+.table-responsive-dark div div div {
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+}
+.table-responsive-light div div div {
+  background-color: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(20px);
+}
+
+.table-responsive-light div div div div,
+.table-responsive-dark div div div div {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.table-responsive-dark select {
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+.table-responsive-dark option {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+}
+
+.table-responsive-light select {
+  background: white;
+  color: black;
+}
+.table-responsive-light option {
+  background: white;
+  color: black;
+}

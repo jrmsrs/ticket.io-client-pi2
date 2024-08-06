@@ -1,0 +1,50 @@
+{
+  "name": "ticket.io-client",
+  "version": "0.1.0",
+  "description": "Frontend Ticket.io feito em React",
+  "keywords": [
+    "react",
+    "starter"
+  ],
+  "main": "src/index.jsx",
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.1",
+    "@mui/material": "^5.14.1",
+    "axios": "^1.4.0",
+    "firebase": "^10.1.0",
+    "react": "^18.2.0",
+    "react-data-table-component": "^7.5.3",
+    "react-data-table-component-extensions": "^1.6.0",
+    "react-datepicker": "^4.16.0",
+    "react-dom": "^18.2.0",
+    "react-google-charts": "^4.0.1",
+    "react-hook-form": "^7.45.2",
+    "react-responsive": "^9.0.2",
+    "react-router-dom": "^6.14.2",
+    "react-select": "^5.7.4",
+    "styled-components": "^6.0.5"
+  },
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "#test": "react-scripts test --env=jsdom",
+    "serve": "vite preview"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "packageManager": "yarn@3.6.1",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.3",
+    "prop-types": "^15.8.1",
+    "vite": "^4.4.7",
+    "vite-plugin-svgr": "^3.2.0",
+    "vite-tsconfig-paths": "^4.2.0"
+  }
+}

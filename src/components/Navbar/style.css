@@ -1,0 +1,15 @@
+.navbar-brand {
+  border: none;
+}
+.navbar .nav-link {
+  border: none;
+}
+.navbar .nav-link:hover {
+  border: none;
+}
+.navbar {
+  box-shadow: none;
+}
+.navbar.bg-primary {
+  border: none;
+}

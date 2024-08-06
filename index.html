@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <!--<link rel="icon" href="/favicon.ico" />-->
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="description"
+      content="Aplicação web com soluções de gerenciamento de problemas voltados para desenvolvedores divididos em grupos solucionadores"
+    />
+    <meta name="author" content="jrmsrs" />
+    <!--<link rel="apple-touch-icon" href="/logo192.png" />-->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon-16x16.png"
+    />
+    <link
+      rel="mask-icon"
+      href="/safari-pinned-tab.svg"
+      color="#5bbad5"
+    />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="/manifest.json" />
+    <!--
+      Notice the use of  in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Ticket.io</title>
+
+    <!-- 
+      bootswatch: 
+      cerulean cosmo cyborg darkly flatly journal litera lumen lux materia minty morph pulse 
+      quartz sandstone simplex sketchy slate solar spacelab superhero united vapor yeti zephyr
+      
+      https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.2.2/XXXXXXXXX/bootstrap.min.css
+    -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.2.2/spacelab/bootstrap.min.css"
+      rel="stylesheet"
+      id="style"
+    />
+    <style>
+      .icon-props {
+        display: flex;
+        align-items: center;
+      }
+      .user {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 25%;
+      }
+      .active {
+        background-color: rgba(0, 0, 0, 0.35);
+        color: rgba(255, 255, 255, 1);
+      }
+      .nav-link {
+        color: rgba(255, 255, 255, 0.75);
+        padding-left: clamp(15px, 2vw, 26px);
+        padding-right: clamp(15px, 2vw, 26px);
+      }
+      .nav-link:hover {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .nav-link:focus {
+        background-color: rgba(0, 0, 0, 0.1);
+        color: rgba(255, 255, 255, 1);
+      }
+
+      .sidebar {
+        color: white;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100; /* Por tras da navbar */
+        padding: 48px 0 0; /* Altura da navbar */
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+      }
+      .sidebar-sticky {
+        height: calc(100vh - 48px);
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollavel */
+        white-space: nowrap;
+      }
+      @media (min-width: 575px) {
+        nav {
+          min-width: 64px;
+        }
+      }
+      @media (min-width: 1100px) {
+        nav.col-lg-3 {
+          max-width: 280px;
+        }
+      }
+      @media (min-width: 1200px) {
+        .container-custom {
+          max-width: 600px;
+          margin: auto;
+        }
+      }
+      @media (min-width: 1300px) {
+        .container-custom {
+          max-width: 700px;
+          margin: auto;
+        }
+      }
+      @media (min-width: 1600px) {
+        .container-custom {
+          max-width: 1000px;
+          margin: auto;
+        }
+      }
+      @media (max-width: 575px) {
+        .sidebar-sticky {
+          width: 260px;
+        }
+      }
+    </style>
+  </head>
+  <body class="vh-100">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module" src="/src/index.jsx"></script>
+  </body>
+</html>

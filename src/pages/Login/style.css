@@ -1,0 +1,33 @@
+body {
+    min-height: 100px;
+  }
+  
+  .login-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+  }
+  
+  .navbar {
+    z-index: 1000000;
+    backdrop-filter: blur(10px);
+  }
+  
+  .login-container div {
+    max-width: 500px;
+    max-height: 700px;
+    padding: 32px;
+    cursor: default;
+  }
+  
+  @media (min-width: 600px) {
+    .login-container div {
+      padding-left: 64px;
+      padding-right: 64px;
+    }
+  }
+  
