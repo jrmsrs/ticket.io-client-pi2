@@ -10,10 +10,10 @@ export default function Issue() {
   const { id } = useParams();
   const [tpData, setTpData] = useState([]);
   const [tpGroupName, setTpGroupName] = useState([]);
-  const [ following, setFollowing ] = useState(null);
+  const [following, setFollowing] = useState(null);
   const navigate = useNavigate();
   const { user } = useContext(AuthGoogleContext);
-  let role = user.localData.role
+  let role = user.localData.role;
 
   let getData = async () => {
     await axios
@@ -33,12 +33,17 @@ export default function Issue() {
             );
           });
       });
-    await axios.get(`${import.meta.env.VITE_RTDB_ENDPOINT}/following/${user.localData.id}.json`)
-      .then(async (res)=>{
-        let data = res.data
-        if (data.find(i => i==id)) setFollowing(true)
-        else setFollowing(false)
-      })
+    await axios
+      .get(
+        `${import.meta.env.VITE_RTDB_ENDPOINT}/following/${
+          user.localData.id
+        }.json`
+      )
+      .then(async (res) => {
+        let data = res.data;
+        if (data.find((i) => i == id)) setFollowing(true);
+        else setFollowing(false);
+      });
   };
 
   let removeData = async () => {
@@ -51,7 +56,7 @@ export default function Issue() {
 
   useEffect(() => {
     getData();
-  },[]);
+  }, []);
 
   return (
     <>
@@ -60,33 +65,50 @@ export default function Issue() {
       </div>
       <h3>Ticket de Problema:</h3>
       <p style={{ marginBottom: "0" }}>
-        <strong>{tpData.title}</strong> [TP{id.slice(0,9)}...]
+        <strong>{tpData.title}</strong> [TP{id.slice(0, 9)}...]
       </p>
-      <pre style={{whiteSpace: "pre-line"}}>{tpData.desc}</pre>
+      <pre style={{ whiteSpace: "pre-line" }}>{tpData.desc}</pre>
       <p>
-        {tpData.incidents_count} incidente{(tpData.incidents_count>1) && <>s</>}
+        {tpData.incidents_count} incidente{tpData.incidents_count > 1 && <>s</>}
         <span> | </span>
-        <Link to={null} onClick={async ()=>{
-          return await axios.get(`${import.meta.env.VITE_RTDB_ENDPOINT}/following/${user.localData.id}.json`)
-          .then(async (res)=>{
-            let data = res.data
-            if (!data || !data.find(i => i==id)){
-              if (!data) data = []
-              data.push(id)
-              console.log(data)
-              setFollowing(true)
-            }else {
-              data = data.filter(function(e) { return e !== id })
-              console.log(data)
-              setFollowing(false)
-            }
-            await axios.put(`${import.meta.env.VITE_RTDB_ENDPOINT}/following/${user.localData.id}.json`,Object.assign({},data))
-                .catch((error)=>{return console.log(error)})
-          })
-        }}>
+        <Link
+          to={null}
+          onClick={async () => {
+            return await axios
+              .get(
+                `${import.meta.env.VITE_RTDB_ENDPOINT}/following/${
+                  user.localData.id
+                }.json`
+              )
+              .then(async (res) => {
+                let data = res.data;
+                if (!data || !data.find((i) => i == id)) {
+                  if (!data) data = [];
+                  data.push(id);
+                  console.log(data);
+                  setFollowing(true);
+                } else {
+                  data = data.filter(function (e) {
+                    return e !== id;
+                  });
+                  console.log(data);
+                  setFollowing(false);
+                }
+                await axios
+                  .put(
+                    `${import.meta.env.VITE_RTDB_ENDPOINT}/following/${
+                      user.localData.id
+                    }.json`,
+                    Object.assign({}, data)
+                  )
+                  .catch((error) => {
+                    return console.log(error);
+                  });
+              });
+          }}
+        >
           {following ? "parar de acompanhar " : "acompanhar "}problema
         </Link>
-        
       </p>
       <h3>Grupo atribuido:</h3>
       {tpGroupName && (
@@ -94,64 +116,84 @@ export default function Issue() {
           <p style={{ marginBottom: "0" }}>
             <Link to={"/groups/" + tpData.group_id}>{tpGroupName}</Link>
           </p>
-          <pre style={{whiteSpace: "pre-line"}}>{tpData.dev_contact}</pre>
-          
+          <pre style={{ whiteSpace: "pre-line" }}>{tpData.dev_contact}</pre>
         </>
       )}
       {!tpGroupName && <p>Nenhum</p>}
       <h3>Previsão de Conclusão:</h3>
-      <p className={(!tpData.conclusion && (new Date(tpData.prev_conclusion) <= new Date()))?"text-danger":""}>
+      <p
+        className={
+          !tpData.conclusion_at &&
+          new Date(tpData.prev_conclusion) <= new Date()
+            ? "text-danger"
+            : ""
+        }
+      >
         {new Date(tpData.prev_conclusion).toLocaleDateString("pt-br", {
           weekday: "long",
           day: "numeric",
           month: "long",
-          year: "numeric"
+          year: "numeric",
         })}
-        {(!tpData.conclusion && (new Date(tpData.prev_conclusion) <= new Date())) && " (atrasado)"}
+        {!tpData.conclusion_at &&
+          new Date(tpData.prev_conclusion) <= new Date() &&
+          " (atrasado)"}
       </p>
       <h3>Conclusão:</h3>
-      {tpData.conclusion && (
+      {tpData.conclusion_at && (
         <>
           <p>
-            {new Date(tpData.conclusion).toLocaleDateString("pt-br", {
+            {new Date(tpData.conclusion_at).toLocaleDateString("pt-br", {
               weekday: "long",
               day: "numeric",
               month: "long",
-              year: "numeric"
+              year: "numeric",
             })}
-          </p>  
+          </p>
           <p>
-            <a target="_blank" rel="noopener noreferrer" href={"http://drive.google.com/open?id="+tpData.drive_doc_id}>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={"http://drive.google.com/open?id=" + tpData.drive_doc_id}
+            >
               Visualizar o Relatório
             </a>
             <span> | </span>
-            <Link to={"/solutions/"+tpData.root_cause}>Causa-Raiz [CR{tpData.root_cause.slice(0,9)}...]</Link>
+            <Link to={"/solutions/" + tpData.solution}>
+              Causa-Raiz [CR{tpData.solution.slice(0, 9)}...]
+            </Link>
           </p>
         </>
       )}
-      
-      {!tpData.conclusion && <p>Em andamento</p>}
+
+      {!tpData.conclusion_at && <p>Em andamento</p>}
       <h3>Data de criação:</h3>
       <p>{new Date(tpData.created_at).toLocaleString()}</p>
 
-      {(role==="d" || role==="g") && 
+      {(role === "d" || role === "g") && (
         <>
           <Link
             to={"/issues/" + tpData.id + "/update?finish=true"}
-            className={"d-flex flex-column m-2 btn btn-primary" + (tpData.conclusion ? " disabled" : "")}
+            className={
+              "d-flex flex-column m-2 btn btn-primary" +
+              (tpData.conclusion_at ? " disabled" : "")
+            }
           >
             <span>
-            <DoneOutlineTwoTone /> Encerrar TP
+              <DoneOutlineTwoTone /> Encerrar TP
             </span>
           </Link>
         </>
-      }
-      {(role==="q" || role==="g") &&
+      )}
+      {(role === "q" || role === "g") && (
         <>
           <div className="d-flex flex-column">
             <Link
               to={"/issues/" + tpData.id + "/update"}
-              className={"m-2 btn btn-primary" + (tpData.conclusion ? " disabled" : "")}
+              className={
+                "m-2 btn btn-primary" +
+                (tpData.conclusion_at ? " disabled" : "")
+              }
             >
               Modificar Ticket de Problema
             </Link>
@@ -163,7 +205,9 @@ export default function Issue() {
             >
               Excluir Ticket de Problema
             </Link>
-            <Link to="/issues/new" className="m-2 text-center">Cadastrar Reincidente / Reabrir o Problema</Link>
+            <Link to="/issues/new" className="m-2 text-center">
+              Cadastrar Reincidente / Reabrir o Problema
+            </Link>
           </div>
           <Modal
             id="confirm"
@@ -171,17 +215,19 @@ export default function Issue() {
             body={
               <>
                 <p>
-                  <strong>Aviso:</strong> Isso EXCLUIRÁ o problema, para encerrar use a opção
-                  "ENCERRAR PROBLEMA".
+                  <strong>Aviso:</strong> Isso EXCLUIRÁ o problema, para
+                  encerrar use a opção "ENCERRAR PROBLEMA".
                 </p>
-                <p>Ainda deseja prosseguir com a exclusão do Ticket de Problema?</p>
+                <p>
+                  Ainda deseja prosseguir com a exclusão do Ticket de Problema?
+                </p>
               </>
             }
             onClick={removeData}
             confirm="Excluir"
           />
         </>
-      }
+      )}
     </>
   );
 }
