@@ -15,13 +15,15 @@ export default function UpdateIssue() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
   const { search } = useLocation();
   const parameters = new URLSearchParams(search);
   const { user } = useContext(AuthGoogleContext);
-  let role = user.localData.role
-  const [finished, setFinished] = useState((role === "d" || role === "g") ? parameters.get('finish') : false);
+  let role = user.localData.role;
+  const [finished, setFinished] = useState(
+    role === "d" || role === "g" ? parameters.get("finish") : false
+  );
   const [selectDate, setSelectDate] = useState(null);
   const [groupsData, setGroupsData] = useState([]);
   const [groupsOptions, setOptions] = useState([]);
@@ -29,12 +31,12 @@ export default function UpdateIssue() {
   const [rootCauseData, setRootCauseData] = useState([]);
   const [rootCauseOptions, setRootCauseOptions] = useState([]);
   const [select, setSelect] = useState(null);
-  const [file, setFile] = useState(null)
+  const [file, setFile] = useState(null);
   const [rootCauseSelect, setRootCauseSelect] = useState("");
   const [result, setResult] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   //let options = []
   let getData = async () => {
     let promises = [];
@@ -56,19 +58,18 @@ export default function UpdateIssue() {
       groupsData.map((op) => {
         var item = {
           value: op.id,
-          label: op.name
+          label: op.name,
         };
         return setOptions((options) => [...options, item]);
       });
       rootCauseData.map((op) => {
         var item = {
           value: op.id,
-          label: `[CR${op.id.slice(0,9)}...] ${op.title}` 
+          label: `[CR${op.id.slice(0, 9)}...] ${op.title}`,
         };
         return setRootCauseOptions((options) => [...options, item]);
       });
-      if (issueData.root_cause)
-        setFinished("true")
+      if (issueData.root_cause) setFinished("true");
     }
   }, [groupsData]);
 
@@ -79,7 +80,7 @@ export default function UpdateIssue() {
           width: "100vw",
           padding: "3px",
           textAlign: "center",
-          margin: "0 auto"
+          margin: "0 auto",
         }}
       >
         <CalendarContainer className={className}>
@@ -98,19 +99,23 @@ export default function UpdateIssue() {
 
   const patchData = async (data, f) => {
     if (f) {
-      let formData = new FormData()
-      formData.append("file",f)
+      let formData = new FormData();
+      formData.append("file", f);
       axios
-        .patch(import.meta.env.VITE_SERVER + "/issue/" + id + "?upload=true", formData,{
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .patch(
+          import.meta.env.VITE_SERVER + "/issue/" + id + "?upload=true",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
         .catch(function (error) {
           console.log(error);
-          return (error)
+          return error;
         })
-        .then(()=>{
+        .then(() => {
           axios
             .patch(import.meta.env.VITE_SERVER + "/issue/" + id, data)
             .then(function (res) {
@@ -118,29 +123,31 @@ export default function UpdateIssue() {
             })
             .catch(function (error) {
               console.log(error);
-            })
-        })
+            });
+        });
     } else {
+      delete data.devContact;
+      delete data.file;
+      if (!data.title) delete data.title;
       await axios
-      .patch(import.meta.env.VITE_SERVER + "/issue/" + id, data)
-      .then(function (res) {
-        navigate("/issues/" + id);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
+        .patch(import.meta.env.VITE_SERVER + "/issue/" + id, data)
+        .then(function (res) {
+          navigate("/issues/" + id);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   };
 
   const onSubmit = (e) => {
     if (select) e.group = select.value;
-    e.prevConclusion = selectDate;
-    if (!issueData.root_cause) 
-      e.file = file
-    if (rootCauseSelect!==""){ 
-      e.rootCause = rootCauseSelect.value;
-      e.conclusion = (new Date).toISOString()
-      delete e.file
+    e.prev_conclusion = selectDate;
+    if (!issueData.root_cause) e.file = file;
+    if (rootCauseSelect !== "") {
+      e.solution = rootCauseSelect.value;
+      e.conclusion_at = new Date().toISOString();
+      delete e.file;
     }
     let o = Object.fromEntries(Object.entries(e).filter(([_, v]) => v !== ""));
     setResult(
@@ -151,16 +158,18 @@ export default function UpdateIssue() {
     patchData(e, file);
   };
 
- return (
+  return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pt-md-4 pt-xl-5 pb-2 mb-3 border-bottom">
-        <h1 className="h2">{role==="d"? "Encerrar": "Modificar"} Ticket de Problema</h1>
+        <h1 className="h2">
+          {role === "d" ? "Encerrar" : "Modificar"} Ticket de Problema
+        </h1>
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="row d-flex justify-content-center"
       >
-        {(role === "q" || role === "g") &&
+        {(role === "q" || role === "g") && (
           <>
             <div className="col-md-6">
               <label htmlFor="title" className="mb-0 col-form-label">
@@ -174,14 +183,17 @@ export default function UpdateIssue() {
                 {...register("title", {
                   minLength: {
                     value: 6,
-                    message: "Mínimo de 6 caracteres"
+                    message: "Mínimo de 6 caracteres",
                   },
                 })}
               />
               <p className="text-warning">{errors?.title?.message}</p>
             </div>
             <div className="col-md-6">
-              <label htmlFor="react-select-2-input" className="mb-0 col-form-label">
+              <label
+                htmlFor="react-select-2-input"
+                className="mb-0 col-form-label"
+              >
                 Grupo atribuído:
               </label>
               <Select
@@ -218,7 +230,10 @@ export default function UpdateIssue() {
               <p className="text-warning">{errors?.desc?.message}</p>
             </div>
             <div className="col-md-6">
-              <label htmlFor="developer-contact" className="mb-0 col-form-label">
+              <label
+                htmlFor="developer-contact"
+                className="mb-0 col-form-label"
+              >
                 Contato do desenvolvedor:{" "}
               </label>
               <textarea
@@ -244,19 +259,34 @@ export default function UpdateIssue() {
               />
             </div>
           </>
-        }
-        {(role === "d" || role === "g") && <>
+        )}
+        {(role === "d" || role === "g") && (
+          <>
             <div className="mt-3 col-6 d-flex align-items-center">
               <div className="  form-check">
-                <input className="form-check-input" disabled={issueData.root_cause} type="checkbox" value="" checked={finished === "true"} onChange={()=>setFinished(finished === "true" ? "false" : "true")} id="finished" />
-                <label htmlFor="finished" disabled={issueData.root_cause} className="form-check-label">
+                <input
+                  className="form-check-input"
+                  disabled={issueData.root_cause}
+                  type="checkbox"
+                  value=""
+                  checked={finished === "true"}
+                  onChange={() =>
+                    setFinished(finished === "true" ? "false" : "true")
+                  }
+                  id="finished"
+                />
+                <label
+                  htmlFor="finished"
+                  disabled={issueData.root_cause}
+                  className="form-check-label"
+                >
                   Problema encerrado
                 </label>
               </div>
             </div>
           </>
-        }
-        {((finished === "false" || !finished) || role==="q") ? 
+        )}
+        {finished === "false" || !finished || role === "q" ? (
           <div className="my-4 col-12 d-flex justify-content-center">
             <button
               type="button"
@@ -266,33 +296,37 @@ export default function UpdateIssue() {
             >
               Atualizar Problema
             </button>
-          </div>:
-        <>
-          <div className="mt-3 col-md-6">
-            <label htmlFor="react-select-8-input" className="mb-0 col-form-label">
-              Causa-Raiz:
-            </label>
-            <Select
-              value={
-                rootCauseSelect ||
-                rootCauseOptions.filter(
-                  (option) => option.value === issueData.root_cause
-                )
-              }
-              onChange={(e) => {
-                handleRootCauseSelect(e);
-              }}
-              name="group"
-              isLoading={groupsData.length <= 0}
-              options={rootCauseOptions}
-              placeholder={
-                groupsData.length <= 0 ? "Carregando..." : "Selecionar"
-              }
-              className="form-text basic-multi-select text-dark mb-3"
-              classNamePrefix="select"
-            />
           </div>
-          <div disabled className="mt-3 col-md-6">
+        ) : (
+          <>
+            <div className="mt-3 col-md-6">
+              <label
+                htmlFor="react-select-8-input"
+                className="mb-0 col-form-label"
+              >
+                Causa-Raiz:
+              </label>
+              <Select
+                value={
+                  rootCauseSelect ||
+                  rootCauseOptions.filter(
+                    (option) => option.value === issueData.root_cause
+                  )
+                }
+                onChange={(e) => {
+                  handleRootCauseSelect(e);
+                }}
+                name="group"
+                isLoading={groupsData.length <= 0}
+                options={rootCauseOptions}
+                placeholder={
+                  groupsData.length <= 0 ? "Carregando..." : "Selecionar"
+                }
+                className="form-text basic-multi-select text-dark mb-3"
+                classNamePrefix="select"
+              />
+            </div>
+            {/* <div disabled className="mt-3 col-md-6">
             <label htmlFor="form-file" className="mb-0 col-form-label">
               {"Relatório" + (issueData.root_cause ? " (não pode ser mais alterado)" : ": ")} 
             </label>
@@ -302,23 +336,37 @@ export default function UpdateIssue() {
               else 
                 setFile("")
             }} />
-          </div>
-          <Link to="/solutions/new" target="_blank" rel="noopener noreferrer" className="mt-3 link text-center">Cadastrar uma Causa-Raiz</Link>
-          <div className="mt-4 col-12 d-flex justify-content-center">
-            <button
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#confirm"
-              className="mx-3 px-5 btn btn-primary"
-              disabled={!file || file===""}
+          </div> */}
+            <Link
+              to="/solutions/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 link text-center"
             >
-              Encerrar Problema
-            </button>
-          </div>
-          {file==="" && <p className="text-center text-danger">apenas arquivos: PDF</p>}
-        </>}
+              Cadastrar uma Causa-Raiz
+            </Link>
+            <div className="mt-4 col-12 d-flex justify-content-center">
+              <button
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#confirm"
+                className="mx-3 px-5 btn btn-primary"
+                // disabled={!file || file === ""}
+              >
+                Encerrar Problema
+              </button>
+            </div>
+            {file === "" && (
+              <p className="text-center text-danger">apenas arquivos: PDF</p>
+            )}
+          </>
+        )}
         <pre style={{ visibility: "hidden" }}>{result}</pre>
-        <Modal id="confirm" body="Deseja modificar o Ticket de Problema?" submit />
+        <Modal
+          id="confirm"
+          body="Deseja modificar o Ticket de Problema?"
+          submit
+        />
       </form>
     </>
   );
