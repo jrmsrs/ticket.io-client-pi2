@@ -11,7 +11,7 @@ function Group() {
   const [groupMembers, setGroupMembers] = useState([]);
   const [groupIssues, setGroupIssues] = useState([]);
   const { user } = useContext(AuthGoogleContext);
-  let role = user.localData.role
+  let role = user.localData.role;
   const navigate = useNavigate();
 
   let getData = async () => {
@@ -53,19 +53,21 @@ function Group() {
       <h3>Membros:</h3>
       <div>
         {groupMembers.map((member) => (
-          <p key={member.id}>
-            {member.name} ({member.email})
+          <p key={member.user.id}>
+            {member.user.name} ({member.user.email})
           </p>
         ))}
       </div>
       <h3>Problemas associados:</h3>
       <div className="mb-4">
         {groupIssues.map((issId) => (
-          <span key={issId}><Link to={`/issues/${issId}`}>{`[TP${issId.slice(0,9)}...]`}</Link> </span>
+          <span key={issId}>
+            <Link to={`/issues/${issId}`}>{`[TP${issId.slice(0, 9)}...]`}</Link>{" "}
+          </span>
         ))}
       </div>
 
-      {(role==="g") && 
+      {role === "g" && (
         <>
           <div className="d-flex flex-column">
             <Link
@@ -90,7 +92,7 @@ function Group() {
             onClick={removeData}
           />
         </>
-      }
+      )}
     </>
   );
 }
