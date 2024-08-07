@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthGoogleContext } from "../../contexts/authGoogle";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate /*, useNavigate */ } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Modal from "../../components/Modal";
 import axios from "axios";
@@ -9,14 +9,14 @@ function Settings() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
   const { user, signed, signOut } = useContext(AuthGoogleContext);
-  let role = user.localData.role
+  let role = user.localData.role;
   const [data, setData] = useState([]);
-  const [dataOutput, setDataOutput] = useState({})
-  const [reportSelectData, setReportSelectData] = useState({});
-  const [reportOutput, setReportOutput] = useState({})
+  const [dataOutput, setDataOutput] = useState({});
+  // const [reportSelectData, setReportSelectData] = useState({});
+  // const [reportOutput, setReportOutput] = useState({})
 
   useEffect(() => {
     getData();
@@ -35,7 +35,10 @@ function Settings() {
     await axios
       .patch(import.meta.env.VITE_SERVER + "/user/" + data.id, _data)
       .then(function (res) {
-        setDataOutput({success: true, message: "Perfil alterado com sucesso"});
+        setDataOutput({
+          success: true,
+          message: "Perfil alterado com sucesso",
+        });
       });
   };
 
@@ -44,24 +47,24 @@ function Settings() {
       (acc, [k, v]) => (v ? { ...acc, [k]: v } : acc),
       {}
     );
-    if (o.name === user.displayName) delete o.name
-    setDataOutput({})
+    if (o.name === user.displayName) delete o.name;
+    setDataOutput({});
     if (Object.keys(o).length === 0 && o.constructor === Object) return;
     patchData(o);
   };
 
-  const patchReportCron = async (_data) => {
-    if (_data.cron)
-      await axios
-        .patch(import.meta.env.VITE_SERVER + "/report", _data)
-        .then(function (res) {
-          setReportOutput({success: true, message: "Período de envio alterado com sucesso"})
-        });
-  };
-  const handleReportPeriodChange = (e) => {
-    e.preventDefault()
-    setReportSelectData({cron: e.target.value})
-  };
+  // const patchReportCron = async (_data) => {
+  //   if (_data.cron)
+  //     await axios
+  //       .patch(import.meta.env.VITE_SERVER + "/report", _data)
+  //       .then(function (res) {
+  //         setReportOutput({success: true, message: "Período de envio alterado com sucesso"})
+  //       });
+  // };
+  // const handleReportPeriodChange = (e) => {
+  //   e.preventDefault()
+  //   setReportSelectData({cron: e.target.value})
+  // };
 
   let removeData = async () => {
     await axios
@@ -77,7 +80,7 @@ function Settings() {
         <h1 className="h2">Configurações</h1>
       </div>
 
-      <form>
+      {/* <form>
         
         <p className="mt-3 mb-2 text-center fs-3 text-uppercase user-select-none">
           Relatório Gerencial
@@ -144,7 +147,7 @@ function Settings() {
           <div>{reportOutput.message}</div>
           <button type="button" className="btn-close" onClick={()=>setReportOutput({})}></button>
         </div>
-      </form>
+      </form> */}
 
       <form onSubmit={handleSubmit(onProfileSubmit)}>
         <p className="mt-3 mb-2 text-center fs-3 text-uppercase user-select-none">
@@ -167,12 +170,12 @@ function Settings() {
             required: "Campo obrigatório",
             minLength: {
               value: 8,
-              message: "Pelo menos 8 caracteres"
+              message: "Pelo menos 8 caracteres",
             },
             maxLength: {
               value: 40,
-              message: "No máximo 40 caracteres, se possível abrevie"
-            }
+              message: "No máximo 40 caracteres, se possível abrevie",
+            },
           })}
         />
         <p className="text-warning">{errors?.name?.message}</p>
@@ -199,16 +202,16 @@ function Settings() {
           {...register("cpf", {
             minLength: {
               value: 11,
-              message: "11 digitos!"
+              message: "11 digitos!",
             },
             maxLength: {
               value: 11,
-              message: "11 digitos!"
+              message: "11 digitos!",
             },
             pattern: {
               value: /^[0-9]+$/i,
-              message: "Apenas caracteres numéricos"
-            }
+              message: "Apenas caracteres numéricos",
+            },
           })}
         />
         <p className="text-warning">{errors?.cpf?.message}</p>
@@ -221,14 +224,33 @@ function Settings() {
           name="role"
           id="role"
           className="form-control bg-dark text-light mb-3"
-          value={(role==="g" ? "Gestor" : (role==="q" ? "Analista de Qualidade" : (role==="d" ? "Desenvolvedor" : "----")))}
+          value={
+            role === "g"
+              ? "Gestor"
+              : role === "q"
+              ? "Analista de Qualidade"
+              : role === "d"
+              ? "Desenvolvedor"
+              : "----"
+          }
         />
 
         <div className="w-100 d-flex flex-column">
-          <button type="button" onClick={handleSubmit(onProfileSubmit)} className="w-50 mx-auto my-3 btn btn-primary">
+          <button
+            type="button"
+            onClick={handleSubmit(onProfileSubmit)}
+            className="w-50 mx-auto my-3 btn btn-primary"
+          >
             Confirmar Alterações
           </button>
-          <p className={"my-2 text-center text-"+ (dataOutput.success?"success":"warning")}>{dataOutput.message}</p>
+          <p
+            className={
+              "my-2 text-center text-" +
+              (dataOutput.success ? "success" : "warning")
+            }
+          >
+            {dataOutput.message}
+          </p>
           <Link
             to={null}
             data-bs-toggle="modal"
